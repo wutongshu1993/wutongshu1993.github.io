@@ -97,15 +97,15 @@ block-level box:display 属性为 b">
 <meta property="og:description" content="BFC是什么Box 是 CSS 布局的对象和基本单位， 直观点来说，就是一个页面是由很多个 Box 组成的。元素的类型和 display 属性，决定了这个 Box 的类型。 不同类型的 Box， 会参与不同的 Formatting Context（一个决定如何渲染文档的容器），因此Box内的元素会以不同的方式渲染。让我们看看有哪些盒子：
 
 block-level box:display 属性为 b">
-<meta property="og:image" content="https://wutongshu1993.github.io/.\bfc1_1.jpg">
-<meta property="og:image" content="https://wutongshu1993.github.io/.\bfc1_2.jpg">
-<meta property="og:updated_time" content="2017-03-16T10:55:35.835Z">
+<meta property="og:image" content="https://wutongshu1993.github.io/images/bfc1_1.jpg">
+<meta property="og:image" content="https://wutongshu1993.github.io/images/bfc1_2.jpg">
+<meta property="og:updated_time" content="2017-03-16T11:05:49.396Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BFC及其应用">
 <meta name="twitter:description" content="BFC是什么Box 是 CSS 布局的对象和基本单位， 直观点来说，就是一个页面是由很多个 Box 组成的。元素的类型和 display 属性，决定了这个 Box 的类型。 不同类型的 Box， 会参与不同的 Formatting Context（一个决定如何渲染文档的容器），因此Box内的元素会以不同的方式渲染。让我们看看有哪些盒子：
 
 block-level box:display 属性为 b">
-<meta name="twitter:image" content="https://wutongshu1993.github.io/.\bfc1_1.jpg">
+<meta name="twitter:image" content="https://wutongshu1993.github.io/images/bfc1_1.jpg">
 
 
 
@@ -406,9 +406,9 @@ block-level box:display 属性为 b">
 <li>overflow不为visible</li>
 </ul>
 <h2 id="BFC的作用"><a href="#BFC的作用" class="headerlink" title="BFC的作用"></a>BFC的作用</h2><h3 id="自适应两栏布局"><a href="#自适应两栏布局" class="headerlink" title="自适应两栏布局"></a>自适应两栏布局</h3><p>一般来说加了浮动之后块级元素之间会出现重叠的现象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">body&#123;</div><div class="line">           width: 900px;</div><div class="line">           margin: 0 auto;</div><div class="line">       &#125;</div><div class="line">       .aside &#123;</div><div class="line">           width: 200px;</div><div class="line">           height: 150px;</div><div class="line">           float: left;</div><div class="line">           background: #f66;</div><div class="line">       &#125;</div><div class="line">       .content &#123;</div><div class="line">           height: 200px;</div><div class="line">           background: #fcc;</div><div class="line">       &#125;</div></pre></td></tr></table></figure></p>
-<p><img src=".\bfc1_1.jpg" alt="image">  </p>
+<p><img src="/images/bfc1_1.jpg" alt="image">  </p>
 <p>运用第5条规则：BFC的区域不会与float box重叠。所以我们只要触发右边的.content的BFC属性，便可是实现自适应，而不重叠的布局。</p>
-<p><img src=".\bfc1_2.jpg" alt="image"></p>
+<p><img src="/images/bfc1_2.jpg" alt="image"></p>
 <h3 id="清除内部浮动："><a href="#清除内部浮动：" class="headerlink" title="清除内部浮动："></a>清除内部浮动：</h3><p>我们常说，清除内部浮动有如下几种办法：</p>
 <ol>
 <li>给父元素加上overflow:hidden或者是overflow:auto</li>
