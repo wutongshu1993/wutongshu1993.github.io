@@ -4,6 +4,44 @@
   
     
     <entry>
+      <title><![CDATA[js基本类型和引用类型小结]]></title>
+      <url>https://wutongshu1993.github.io/2017/03/19/js%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%E5%B0%8F%E7%BB%93/</url>
+      <content type="html"><![CDATA[<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p><strong>基本类型</strong>指的是简单的数据段，String Number Undefined Null Boolean这五种，他们的值保存在栈中。<strong>引用类型</strong>指的是可能由多个值构成的对象，值保存在堆中。</p>
+<p>为什么会有堆和栈之分呢？因为每个函数执行时都会建立自己的内存栈，调用结束就释放内存。堆内存中的对象不会随着调用的结束而销毁，只有当一个对象没有任何引用变量引用时，系统的垃圾回收机制才会回收它。</p>
+<h2 id="变量的赋值"><a href="#变量的赋值" class="headerlink" title="变量的赋值"></a>变量的赋值</h2><p>对于基本类型来说，如果从一个变量A向另一个变量B赋基本类型的值，会将A的值复制一份，然后把复制后的值给B。事实上就是A,B在栈中指向不同的位置，完全不相关。</p>
+<p>对于引用类型来说，操作对象实际上操作的是对象的引用，（当为对象添加属性的时候，操作的是实际的对象）。当将Obj赋值给newObj时，也会将存储在变量对象obj中的值复制一份到为新变量newObj分配的空间中，但是这个值的副本实际上是一个指针，指向存储在堆中的一个对象。因此改变newObj会影响到obj。</p>
+<p><img src="/images/引用赋值.jpg" alt="image"></p>
+<h3 id="深拷贝与浅拷贝"><a href="#深拷贝与浅拷贝" class="headerlink" title="深拷贝与浅拷贝"></a>深拷贝与浅拷贝</h3><p>浅拷贝：两个对象指向的是堆中的同一个对象，一方改变，另一个也会改变。</p>
+<h4 id="数组的深拷贝的实现："><a href="#数组的深拷贝的实现：" class="headerlink" title="数组的深拷贝的实现："></a>数组的深拷贝的实现：</h4><ol>
+<li>var newArray = array.slice(0);</li>
+<li>var newArray = array.contact();</li>
+</ol>
+<h4 id="对象的深拷贝"><a href="#对象的深拷贝" class="headerlink" title="对象的深拷贝"></a>对象的深拷贝</h4><ol>
+<li>var newObj = Json.parse( Json.stringfy(obj) );</li>
+<li>var newObj = Object.create(obj);//把obj当做是newObj的原型进行创建<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function clone(obj) &#123;</div><div class="line">    var newObj = &#123;&#125;;</div><div class="line">    for(var i in obj)&#123;</div><div class="line">        newObj[obj[i]] = typeof obj[i] === &apos;object&apos; ? clone(obj[i]) : obj[i];</div><div class="line">    &#125;</div><div class="line">    return newObj;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="传递参数"><a href="#传递参数" class="headerlink" title="传递参数"></a>传递参数</h2><h3 id="基本类型传参"><a href="#基本类型传参" class="headerlink" title="基本类型传参"></a>基本类型传参</h3><p>基本类型的传参和基本类型的赋值相同，都是复制一个临时变量。</p>
+<p><img src="/images/基本类型的参数传递.jpg" alt="image"></p>
+<p>因此，在函数addTen中改变的值只是一个临时变量的值，并不会影响到num本身。</p>
+<h3 id="引用类型传参"><a href="#引用类型传参" class="headerlink" title="引用类型传参"></a>引用类型传参</h3><p>引用类型的传参传递的也是值，而不是引用。</p>
+<p><img src="/images/引用类型传参1.jpg" alt="image"></p>
+<p>这里，虽然是按值传递的，其实还是指向的是堆内存中唯一一个变量。</p>
+<p>下面这个例子可以证明引用类型的参数传递是按值传递的，而不是按地址传递的。</p>
+<p><img src="/images/引用类型按值传参证明.jpg" alt="image"></p>
+<p>这里，在全局变量中有一个person，如果是按引用传递的，那么在setName函数内部对obj的改变应该会反映到person上面，但是并不会。事实上内部新建的obj之后，这个变量引用就是一个局部变量，函数执行完了就销毁了，并不会影响到外部的person。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 引用类型 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[BFC及其应用]]></title>
       <url>https://wutongshu1993.github.io/2017/03/16/BFC%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/</url>
       <content type="html"><![CDATA[<h1 id="BFC是什么"><a href="#BFC是什么" class="headerlink" title="BFC是什么"></a>BFC是什么</h1><p>Box 是 CSS 布局的对象和基本单位， 直观点来说，就是一个页面是由很多个 Box 组成的。元素的类型和 display 属性，决定了这个 Box 的类型。 不同类型的 Box， 会参与不同的 Formatting Context（一个决定如何渲染文档的容器），因此Box内的元素会以不同的方式渲染。让我们看看有哪些盒子：</p>
