@@ -101,7 +101,8 @@ session和cookie的区别
 存储位置不一样，cookie存在浏览器，session存在服务器端。
 存取类型不同，cookie只能存Unicode字符或者二进制数据，需要先进行编码。而session可以存取任何类型的数据。
 有效时间不同，">
-<meta property="og:updated_time" content="2017-04-01T00:36:21.413Z">
+<meta property="og:image" content="https://wutongshu1993.github.io/\images\服务器回写cookie样例.png">
+<meta property="og:updated_time" content="2017-04-03T01:31:50.454Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="session和cookie的区别和联系">
 <meta name="twitter:description" content="session 和cookie的区别和联系由于http协议是无连接，无状态的，因此服务器是不会保存客户信息的，需要借助cookie和session来完成。
@@ -109,6 +110,7 @@ session和cookie的区别
 存储位置不一样，cookie存在浏览器，session存在服务器端。
 存取类型不同，cookie只能存Unicode字符或者二进制数据，需要先进行编码。而session可以存取任何类型的数据。
 有效时间不同，">
+<meta name="twitter:image" content="https://wutongshu1993.github.io/\images\服务器回写cookie样例.png">
 
 
 
@@ -393,7 +395,7 @@ session和cookie的区别
 <li>容量大小也不同，cookie的容量最多4KB，session应该是没有限制的。</li>
 </ol>
 <h2 id="cookie的产生"><a href="#cookie的产生" class="headerlink" title="cookie的产生"></a>cookie的产生</h2><p>首先需要明白的cookie需要在每次请求指定domain域的时候都会携带，所以只有4kB的容量。</p>
-<p>cookie是一段很小的文本信息，客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。通过在response中添加响应头setCookie实现，如：Set-Cookie: JsessionID=D356DFFF33AA134DAB; Max-Age=3600; Version=1。 客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器。服务器检查该Cookie，以此来辨认用户状态。服务器还可以根据需要修改Cookie的内容。</p>
+<p>cookie是一段很小的文本信息，客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。通过在response中添加响应头setCookie实现，如：Set-Cookie: JsessionID=D356DFFF33AA134DAB; Max-Age=3600; Version=1。<br><img src="\images\服务器回写cookie样例.png" alt="image"><br> 客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器。服务器检查该Cookie，以此来辨认用户状态。服务器还可以根据需要修改Cookie的内容。</p>
 <p>当cookie已经产生了，下一次再发送请求的时候，就会根据cookie中的sessionID来查出服务器端对应的session，同时一个session中可以有多个attribute。</p>
 <h2 id="session的用法"><a href="#session的用法" class="headerlink" title="session的用法"></a>session的用法</h2><p>在java中Session对应的类为javax.servlet.http.HttpSession类。getAttribute(Stringkey)和setAttribute(String key，Objectvalue)。常用的方法还有session.getId</p>
 <p>session的存储有效的问题，不是常说session是在会话期间有效吗？那我们关掉浏览器后再次打开淘宝session怎么还存在呢？</p>
@@ -532,7 +534,7 @@ var duoshuoQuery = {short_name:"wutongshu1993"};
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
