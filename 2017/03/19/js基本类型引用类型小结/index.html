@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://wutongshu1993.github.io/images/基本类型的参数传递.jpg">
 <meta property="og:image" content="https://wutongshu1993.github.io/images/引用类型传参1.jpg">
 <meta property="og:image" content="https://wutongshu1993.github.io/images/引用类型按值传参证明.jpg">
-<meta property="og:updated_time" content="2017-03-19T02:49:03.109Z">
+<meta property="og:updated_time" content="2017-04-17T01:56:28.003Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js基本类型和引用类型小结">
 <meta name="twitter:description" content="概念基本类型指的是简单的数据段，String Number Undefined Null Boolean这五种，他们的值保存在栈中。引用类型指的是可能由多个值构成的对象，值保存在堆中。
@@ -389,9 +389,14 @@
 <p>对于引用类型来说，操作对象实际上操作的是对象的引用，（当为对象添加属性的时候，操作的是实际的对象）。当将Obj赋值给newObj时，也会将存储在变量对象obj中的值复制一份到为新变量newObj分配的空间中，但是这个值的副本实际上是一个指针，指向存储在堆中的一个对象。因此改变newObj会影响到obj。</p>
 <p><img src="/images/引用赋值.jpg" alt="image"></p>
 <h3 id="深拷贝与浅拷贝"><a href="#深拷贝与浅拷贝" class="headerlink" title="深拷贝与浅拷贝"></a>深拷贝与浅拷贝</h3><p>浅拷贝：两个对象指向的是堆中的同一个对象，一方改变，另一个也会改变。</p>
-<h4 id="数组的深拷贝的实现："><a href="#数组的深拷贝的实现：" class="headerlink" title="数组的深拷贝的实现："></a>数组的深拷贝的实现：</h4><ol>
-<li>var newArray = array.slice(0);</li>
-<li>var newArray = array.contact();</li>
+<h4 id="数组的深拷贝的实现："><a href="#数组的深拷贝的实现：" class="headerlink" title="数组的深拷贝的实现："></a>数组的深拷贝的实现：</h4><p>如果数组中的元素是基本类型，那么slice和concat是没有问题的，但是如果数组中的元素是对象类型的话，其实这两个函数也只是一个浅复制。</p>
+<blockquote>
+<p>concat方法返回一个新数组，它包含array的浅复制。（摘自javascript语言精粹 第8章）</p>
+</blockquote>
+<ol>
+<li>var newArray = array.slice(0);//这个其实是浅复制</li>
+<li>var newArray = array.contact();//之前一直理解错了，其实concat也是浅拷贝。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var arr = [&#123;name:&apos;lily&apos;&#125;,&#123;name:&apos;jack&apos;&#125;];</div><div class="line">var b = arr.concat([5,6]);</div><div class="line">b</div><div class="line">[Object, Object, 5, 6]</div><div class="line">arr[0].name = &apos;bob&apos;;</div><div class="line">b[0].name//输出&quot;bob&quot;</div></pre></td></tr></table></figure>
+</li>
 </ol>
 <h4 id="对象的深拷贝"><a href="#对象的深拷贝" class="headerlink" title="对象的深拷贝"></a>对象的深拷贝</h4><ol>
 <li>var newObj = Json.parse( Json.stringfy(obj) );</li>
@@ -564,7 +569,7 @@ var duoshuoQuery = {short_name:"wutongshu1993"};
           
             
               <span class="links-of-author-item">
-                <a href="https://github.com/eutongshu1993/" target="_blank" title="GitHub">
+                <a href="https://github.com/wutongshu1993/" target="_blank" title="GitHub">
                   
                     <i class="fa fa-fw fa-github"></i>
                   
