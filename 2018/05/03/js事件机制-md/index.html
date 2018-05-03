@@ -1,0 +1,939 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js事件机制," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="感觉最近过的浑浑噩噩的，应该静下心来学习一些知识了，不管以后是做前端还是后端，静下心来学习总归是重要的。用胡适先生的话来鼓励自己：管什么真理无穷，进一寸有进一寸的欢喜。
+
+调用栈与任务队列在js是一门单线程语言，这里的单线程指的是在JS引擎中负责解释和执行js代码的线程只有一个，叫做main thread。
+但是实际上还存在其他的线程。例如：处理AJAX请求的线程、处理DOM事件的线程、定时器线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js事件机制">
+<meta property="og:url" content="https://wutongshu1993.github.io/2018/05/03/js事件机制-md/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="感觉最近过的浑浑噩噩的，应该静下心来学习一些知识了，不管以后是做前端还是后端，静下心来学习总归是重要的。用胡适先生的话来鼓励自己：管什么真理无穷，进一寸有进一寸的欢喜。
+
+调用栈与任务队列在js是一门单线程语言，这里的单线程指的是在JS引擎中负责解释和执行js代码的线程只有一个，叫做main thread。
+但是实际上还存在其他的线程。例如：处理AJAX请求的线程、处理DOM事件的线程、定时器线">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-e902447823cf13e5a547214363233858_hd.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-9e5a3e686df7e84068575121c1ec9fcd_hd.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-1a9a6a95c4a7d3dc45facb5b2545640d_hd.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-4a8c8a73009cc73d5efdb833fdf81b03_hd.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-37a7df54154dd521ced4dae2e3470c22_hd.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-800d6abf4bcdef9a354c9d60f2882a26_hd.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-e804f07a0d9b0436941e3e48550349b9_hd.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-c3c2686ecfa45b21ff3bc99b0252b90b_hd.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-f78ad9009fd2622c139f2da66f61d19b_hd.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-51325b7f24ce7f979e9288e82a1230e0_hd.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-9bc7b1147a343d8e989d64f408642e35_hd.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-9b60523cf5eb759edb4181f51c441105_hd.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-84b2608d1e36e66e847189f4a83eda20_hd.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-b074f0faafd94060fb0718ca5feda83b_hd.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-b88fe4ed91a895869c376aa6fa0185c3_hd.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-b88fe4ed91a895869c376aa6fa0185c3_hd.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-04d930dcfeadcf46f270c91ef0edee7b_hd.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-efbc17856004ba09b844d23c35176c10_hd.jpg">
+<meta property="og:updated_time" content="2018-05-03T08:39:02.502Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="js事件机制">
+<meta name="twitter:description" content="感觉最近过的浑浑噩噩的，应该静下心来学习一些知识了，不管以后是做前端还是后端，静下心来学习总归是重要的。用胡适先生的话来鼓励自己：管什么真理无穷，进一寸有进一寸的欢喜。
+
+调用栈与任务队列在js是一门单线程语言，这里的单线程指的是在JS引擎中负责解释和执行js代码的线程只有一个，叫做main thread。
+但是实际上还存在其他的线程。例如：处理AJAX请求的线程、处理DOM事件的线程、定时器线">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-e902447823cf13e5a547214363233858_hd.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wutongshu1993.github.io/2018/05/03/js事件机制-md/"/>
+
+
+
+
+
+  <title> js事件机制 | Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Blog of HuiminLu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-messages">
+          <a href="/message" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            menu.messages
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wutongshu1993.github.io/2018/05/03/js事件机制-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HuiminLu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/0.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                js事件机制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-03T16:33:42+08:00">
+                2018-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/03/js事件机制-md/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/03/js事件机制-md/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/05/03/js事件机制-md/" class="leancloud_visitors" data-flag-title="js事件机制">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读量 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>感觉最近过的浑浑噩噩的，应该静下心来学习一些知识了，不管以后是做前端还是后端，静下心来学习总归是重要的。用胡适先生的话来鼓励自己：管什么真理无穷，进一寸有进一寸的欢喜。</p>
+</blockquote>
+<h1 id="调用栈与任务队列"><a href="#调用栈与任务队列" class="headerlink" title="调用栈与任务队列"></a>调用栈与任务队列</h1><p>在js是一门单线程语言，这里的单线程指的是在JS引擎中负责解释和执行js代码的线程只有一个，叫做main thread。</p>
+<p>但是实际上还存在其他的线程。例如：处理AJAX请求的线程、处理DOM事件的线程、定时器线程、读写文件的线程(例如在Node.js中)等等。这些线程可能存在于JS引擎之内，也可能存在于JS引擎之外，在此我们不做区分。不妨叫它们工作线程。</p>
+<p>在js的事件机制中很重要的两个概念是调用堆栈和任务队列，调用堆栈可以想象成同步任务，任务队列中保存的是已经满足条件需要被执行的异步任务的回调函数。对一个调用堆栈中的task进行处理的时候，其他都得等着。如果在执行过程中遇到setTimeout等异步操作的时候，<strong>会把setTimeOut交给浏览器的其他模块</strong>(以webkit为例，是webcore模块)进行处理，<strong>当到达setTimeout指定的延时执行的时间之后，task(回调函数)会放入到任务队列之中</strong>。一般不同的异步任务的回调函数会放入不同的任务队列之中。<strong>等到调用栈中所有task执行完毕之后，接着去执行任务队列之中的task(回调函数)。</strong></p>
+<p><img src="https://pic2.zhimg.com/80/v2-e902447823cf13e5a547214363233858_hd.jpg" alt="image"></p>
+<p>在上图中，调用栈中遇到DOM操作、ajax请求以及setTimeout等WebAPIs的时候就会交给浏览器内核的其他模块进行处理，webkit内核在Javasctipt执行引擎之外，有一个重要的模块是webcore模块。对于图中WebAPIs提到的三种API，webcore分别提供了DOM Binding、network、timer模块来处理底层实现。等到这些模块处理完这些操作的时候将回调函数放入任务队列中，之后等栈中的task执行完之后再去执行任务队列之中的回调函数。</p>
+<h2 id="setTimeOut与循环机制"><a href="#setTimeOut与循环机制" class="headerlink" title="setTimeOut与循环机制"></a>setTimeOut与循环机制</h2><ol>
+<li>首先将main函数的执行上下文入栈<br><img src="https://pic1.zhimg.com/80/v2-9e5a3e686df7e84068575121c1ec9fcd_hd.jpg" alt="image"></li>
+<li>代码接着执行，遇到console.log(‘Hi’),此时log(‘Hi’)入栈，console.log方法只是一个webkit内核支持的普通的方法，所以log(‘Hi’)方法立即被执行。此时输出’Hi’。</li>
+</ol>
+<p><img src="https://pic1.zhimg.com/80/v2-1a9a6a95c4a7d3dc45facb5b2545640d_hd.jpg" alt="image"></p>
+<ol>
+<li>当遇到setTimeout的时候，执行引擎将其添加到栈中。</li>
+</ol>
+<p><img src="https://pic4.zhimg.com/80/v2-4a8c8a73009cc73d5efdb833fdf81b03_hd.jpg" alt="image"> </p>
+<ol>
+<li><p>调用栈发现setTimeout是之前提到的WebAPIs中的API，因此将其出栈之后将延时执行的函数交给浏览器的timer模块进行处理。<br><img src="https://pic3.zhimg.com/80/v2-37a7df54154dd521ced4dae2e3470c22_hd.jpg" alt="image"></p>
+</li>
+<li><p>timer模块去处理延时执行的函数，此时执行引擎接着执行将log(‘SJS’)添加到栈中，此时输出’SJS’<br><img src="https://pic2.zhimg.com/80/v2-800d6abf4bcdef9a354c9d60f2882a26_hd.jpg" alt="image"></p>
+</li>
+<li><p>当timer模块中延时方法规定的时间到了之后就将其放入到任务队列之中，此时调用栈中的task已经全部执行完毕。<br><img src="https://pic4.zhimg.com/80/v2-e804f07a0d9b0436941e3e48550349b9_hd.jpg" alt="image"></p>
+</li>
+<li><p>调用栈中的task执行完毕之后，执行引擎会接着看执行任务队列中是否有需要执行的回调函数。这里的cb函数被执行引擎添加到调用栈中，接着执行里面的代码，输出’there’。等到执行结束之后再出栈。</p>
+</li>
+</ol>
+<p><img src="https://pic1.zhimg.com/80/v2-c3c2686ecfa45b21ff3bc99b0252b90b_hd.jpg" alt="image"><br><img src="https://pic4.zhimg.com/80/v2-f78ad9009fd2622c139f2da66f61d19b_hd.jpg" alt="image"></p>
+<h1 id="事件机制深入理解"><a href="#事件机制深入理解" class="headerlink" title="事件机制深入理解"></a>事件机制深入理解</h1><blockquote>
+<p>接下来将介绍SetTimeOut,SetInterval,Promise,nextTick等函数在时间机制中的执行时机。</p>
+</blockquote>
+<p>先看一段代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">(function test() &#123;</div><div class="line">    setTimeout(function() &#123;console.log(4)&#125;, 0);</div><div class="line">    new Promise(function executor(resolve) &#123;</div><div class="line">        console.log(1);</div><div class="line">        for( var i=0 ; i&lt;10000 ; i++ ) &#123;</div><div class="line">            i == 9999 &amp;&amp; resolve();</div><div class="line">        &#125;</div><div class="line">        console.log(2);</div><div class="line">    &#125;).then(function() &#123;</div><div class="line">        console.log(5);</div><div class="line">    &#125;);</div><div class="line">    console.log(3);</div><div class="line">&#125;)()</div></pre></td></tr></table></figure></p>
+<p>输出1，2，3，5，4 你做对了吗？</p>
+<p>在这段代码里面，setTimeout和Promise都被称之为任务源，来自不同任务源的回调函数会被放进不同的任务队列里面。setTimeout的回调函数被放进setTimeout的任务队列之中。而对于Promise,它的回调函数并不是传进去的executer函数，而是其异步执行的then方法里面的参数，被放进Promise的任务队列之中。也就是说==Promise的第一个参数并不会被放进Promise的任务队列之中，而会在当前队列就执行，而将then方法里面的参数放进Promise的任务队列中。==</p>
+<h2 id="macro-task宏任务与micro-task微任务"><a href="#macro-task宏任务与micro-task微任务" class="headerlink" title="macro-task宏任务与micro-task微任务"></a>macro-task宏任务与micro-task微任务</h2><ol>
+<li>macro-task包括：<strong>script(整体代码), setTimeout, setInterval, setImmediate, I/O, UI rendering。</strong></li>
+<li>micro-task包括：<strong>process.nextTick, Promises, Object.observe, MutationObserver</strong></li>
+</ol>
+<p>事件循环的顺序是从script开始第一次循环，随后全局上下文进入函数调用栈，碰到macro-task就将其交给处理它的模块处理完之后将回调函数放进macro-task的队列之中，碰到micro-task也是将其回调函数放进micro-task的队列之中。直到函数调用栈清空只剩全局执行上下文，然后开始执行所有的micro-task。当所有可执行的micro-task执行完毕之后。循环再次执行macro-task中的一个任务队列，执行完之后再执行所有的micro-task，就这样一直循环。</p>
+<p>总的来说</p>
+<ol>
+<li>不同的任务会放进不同的任务队列之中。</li>
+<li>先执行macro-task（这里指的是整体代码，非异步代码），等到函数调用栈清空之后再执行所有在队列之中的micro-task。</li>
+<li>等到所有macro-task执行完之后再从micro-task中的一个任务队列开始执行，就这样一直循环。</li>
+<li>当有多个macro-task(micro-task)队列时，事件循环的顺序是按上文macro-task(micro-task)的分类中书写的顺序执行的。</li>
+</ol>
+<p>代码段的解释如下：</p>
+<ol>
+<li>script任务源先执行，全局上下文入栈。<br><img src="https://pic3.zhimg.com/80/v2-51325b7f24ce7f979e9288e82a1230e0_hd.jpg" alt="image"></li>
+<li>script任务源的代码在执行时遇到setTimeout,作为一个macro-task，将其回调函数放入自己的队列之中。<br><img src="https://pic4.zhimg.com/80/v2-9bc7b1147a343d8e989d64f408642e35_hd.jpg" alt="image"> </li>
+<li>script任务源的代码在执行时遇到Promise实例。Promise构造函数中的第一个参数是在当前任务直接执行不会被放入队列之中，因此此时输出 1 。<br><img src="https://pic2.zhimg.com/80/v2-9b60523cf5eb759edb4181f51c441105_hd.jpg" alt="image"><br>4.在for循环里面遇到resolve函数，函数入栈执行之后出栈，此时Promise的状态变成Fulfilled。代码接着执行遇到console.log(2),输出2。<br><img src="https://pic4.zhimg.com/80/v2-84b2608d1e36e66e847189f4a83eda20_hd.jpg" alt="image"></li>
+<li>接着执行，代码遇到then方法，其回调函数作为micro-task入栈，进入Promise的任务队列之中。<br><img src="https://pic2.zhimg.com/80/v2-b074f0faafd94060fb0718ca5feda83b_hd.jpg" alt="image"></li>
+<li>代码接着执行，此时遇到console.log(3),输出3。<br><img src="https://pic1.zhimg.com/80/v2-b88fe4ed91a895869c376aa6fa0185c3_hd.jpg" alt="image"></li>
+<li>输出3之后第一个宏任务script的代码执行完毕，这时候开始开始执行所有在队列之中的micro-task。then的回调函数入栈执行完毕之后出栈，这时候输出5<br><img src="https://pic1.zhimg.com/80/v2-b88fe4ed91a895869c376aa6fa0185c3_hd.jpg" alt="image"><br><img src="https://pic3.zhimg.com/80/v2-04d930dcfeadcf46f270c91ef0edee7b_hd.jpg" alt="image"></li>
+<li>这时候所有的micro-task执行完毕，第一轮循环结束。第二轮循环从setTimeout的任务队列开始，setTimeout的回调函数入栈执行完毕之后出栈，此时输出4。<br><img src="https://pic2.zhimg.com/80/v2-efbc17856004ba09b844d23c35176c10_hd.jpg" alt="image"></li>
+</ol>
+<p>终极例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">console.log(&apos;golb1&apos;);</div><div class="line">setImmediate(function() &#123;</div><div class="line">    console.log(&apos;immediate1&apos;);</div><div class="line">    process.nextTick(function() &#123;</div><div class="line">        console.log(&apos;immediate1_nextTick&apos;);</div><div class="line">    &#125;)</div><div class="line">    new Promise(function(resolve) &#123;</div><div class="line">        console.log(&apos;immediate1_promise&apos;);</div><div class="line">        resolve();</div><div class="line">    &#125;).then(function() &#123;</div><div class="line">        console.log(&apos;immediate1_then&apos;)</div><div class="line">    &#125;)</div><div class="line">&#125;)</div><div class="line">setTimeout(function() &#123;</div><div class="line">    console.log(&apos;timeout1&apos;);</div><div class="line">    process.nextTick(function() &#123;</div><div class="line">        console.log(&apos;timeout1_nextTick&apos;);</div><div class="line">    &#125;)</div><div class="line">    new Promise(function(resolve) &#123;</div><div class="line">        console.log(&apos;timeout1_promise&apos;);</div><div class="line">        resolve();</div><div class="line">    &#125;).then(function() &#123;</div><div class="line">        console.log(&apos;timeout1_then&apos;)</div><div class="line">    &#125;)</div><div class="line">    setTimeout(function() &#123;</div><div class="line">        console.log(&apos;timeout1_timeout1&apos;);</div><div class="line">        process.nextTick(function() &#123;</div><div class="line">            console.log(&apos;timeout1_timeout1_nextTick&apos;);</div><div class="line">        &#125;)</div><div class="line">        setImmediate(function() &#123;</div><div class="line">            console.log(&apos;timeout1_setImmediate1&apos;);</div><div class="line">        &#125;)</div><div class="line">    &#125;);</div><div class="line">&#125;)</div><div class="line">new Promise(function(resolve) &#123;</div><div class="line">    console.log(&apos;glob1_promise&apos;);</div><div class="line">    resolve();</div><div class="line">&#125;).then(function() &#123;</div><div class="line">    console.log(&apos;glob1_then&apos;)</div><div class="line">&#125;)</div><div class="line">process.nextTick(function() &#123;</div><div class="line">    console.log(&apos;glob1_nextTick&apos;);</div><div class="line">&#125;)</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">golb1</div><div class="line">glob1_promise</div><div class="line">glob1_nextTick</div><div class="line">glob1_then</div><div class="line">timeout1</div><div class="line">timeout1_promise</div><div class="line">timeout1_nextTick</div><div class="line">timeout1_then</div><div class="line">immediate1</div><div class="line">immediate1_promise</div><div class="line">immediate1_nextTick</div><div class="line">immediate1_then</div><div class="line">timeout1_timeout1</div><div class="line">timeout1_timeout1_nextTick</div><div class="line">timeout1_setImmediate1</div></pre></td></tr></table></figure></p>
+<p>总结：</p>
+<ol>
+<li>同步代码执行顺序优先级高于异步代码执行顺序优先级；</li>
+<li>new Promise(fn)中的fn是同步执行；</li>
+<li>process.nextTick()&gt;Promise.then()&gt;setTimeout&gt;setImmediate。</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://zhuanlan.zhihu.com/p/26229293" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/26229293</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/26238030" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/26238030</a></li>
+<li><a href="https://www.cnblogs.com/yonglin/p/7857804.html" target="_blank" rel="external">https://www.cnblogs.com/yonglin/p/7857804.html</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js事件机制/" rel="tag"># js事件机制</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/12/webpack配置/" rel="next" title="webpack配置">
+                <i class="fa fa-chevron-left"></i> webpack配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="<%- page.path %>" data-title="<%- page.title %>" data-url="<%- page.permalink %>"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"wutongshu1993"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/0.jpg"
+               alt="HuiminLu" />
+          <p class="site-author-name" itemprop="name">HuiminLu</p>
+           
+              <p class="site-description motion-element" itemprop="description">学思</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wutongshu1993/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#调用栈与任务队列"><span class="nav-number">1.</span> <span class="nav-text">调用栈与任务队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#setTimeOut与循环机制"><span class="nav-number">1.1.</span> <span class="nav-text">setTimeOut与循环机制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事件机制深入理解"><span class="nav-number">2.</span> <span class="nav-text">事件机制深入理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#macro-task宏任务与micro-task微任务"><span class="nav-number">2.1.</span> <span class="nav-text">macro-task宏任务与micro-task微任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">2.2.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HuiminLu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wutongshu1993"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("KB2SDhpNs4iNyYANkpVHYmWa-gzGzoHsz", "nUfipEkoTKVWjUY7j62vbYFP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
