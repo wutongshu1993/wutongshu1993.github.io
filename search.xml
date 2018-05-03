@@ -69,8 +69,7 @@
 <ol>
 <li>script任务源的代码在执行时遇到Promise实例。Promise构造函数中的第一个参数是在当前任务直接执行不会被放入队列之中，因此此时输出 1 。</li>
 </ol>
-<p><img src="/images/事件机制12.png" alt="image">  </p>
-<p>4.在for循环里面遇到resolve函数，函数入栈执行之后出栈，此时Promise的状态变成Fulfilled。代码接着执行遇到console.log(2),输出2。</p>
+<p><img src="/images/事件机制12.png" alt="image"><br>4.在for循环里面遇到resolve函数，函数入栈执行之后出栈，此时Promise的状态变成Fulfilled。代码接着执行遇到console.log(2),输出2。</p>
 <p><img src="/images/事件机制13.png" alt="image"></p>
 <ol>
 <li>接着执行，代码遇到then方法，其回调函数作为micro-task入栈，进入Promise的任务队列之中。</li>
