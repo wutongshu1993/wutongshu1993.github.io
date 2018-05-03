@@ -117,7 +117,7 @@
 <meta property="og:image" content="https://wutongshu1993.github.io/images/事件机制16.png">
 <meta property="og:image" content="https://wutongshu1993.github.io/images/事件机制17.png">
 <meta property="og:image" content="https://wutongshu1993.github.io/images/事件机制18.png">
-<meta property="og:updated_time" content="2018-05-03T09:24:42.203Z">
+<meta property="og:updated_time" content="2018-05-03T09:31:47.224Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js事件机制">
 <meta name="twitter:description" content="感觉最近过的浑浑噩噩的，应该静下心来学习一些知识了，不管以后是做前端还是后端，静下心来学习总归是重要的。用胡适先生的话来鼓励自己：管什么真理无穷，进一寸有进一寸的欢喜。
@@ -411,7 +411,7 @@
 <h2 id="setTimeOut与循环机制"><a href="#setTimeOut与循环机制" class="headerlink" title="setTimeOut与循环机制"></a>setTimeOut与循环机制</h2><ol>
 <li>首先将main函数的执行上下文入栈<br><img src="/images/事件机制2.png" alt="image">  </li>
 <li>代码接着执行，遇到console.log(‘Hi’),此时log(‘Hi’)入栈，console.log方法只是一个webkit内核支持的普通的方法，所以log(‘Hi’)方法立即被执行。此时输出’Hi’。<br><img src="/images/事件机制3.png" alt="image">  </li>
-<li>当遇到setTimeout的时候，执行引擎将其添加到栈中。<br><img src="/images/事件机制4.png" alt="image">  </li>
+<li>当遇到setTimeout的时候，执行引擎将其添加到栈中999。<br><img src="/images/事件机制4.png" alt="image">  </li>
 <li>调用栈发现setTimeout是之前提到的WebAPIs中的API，因此将其出栈之后将延时执行的函数交给浏览器的timer模块进行处理。<br><img src="/images/事件机制5.png" alt="image">  </li>
 <li>timer模块去处理延时执行的函数，此时执行引擎接着执行将log(‘SJS’)添加到栈中，此时输出’SJS’<br><img src="/images/事件机制6.png" alt="image">  </li>
 <li>当timer模块中延时方法规定的时间到了之后就将其放入到任务队列之中，此时调用栈中的task已经全部执行完毕。<br><img src="/images/事件机制7.png" alt="image">  </li>
